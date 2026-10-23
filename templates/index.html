@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-copy"><div class="eyebrow">TRUST · TRACEABILITY · VERIFICATION</div><h1>Academic credentials,<br><span>verified with confidence.</span></h1>
+  <p>Issue, manage, and verify academic certificate records in one place. Detect record changes and check revocation status with a clear audit trail.</p>
+  <div class="actions"><a class="button primary" href="{{ url_for('verify') }}">Verify a certificate</a>{% if g.user and g.user.role in ['institution','admin'] %}<a class="button secondary" href="{{ url_for('issue') }}">Issue certificate</a>{% else %}<a class="button secondary" href="{{ url_for('register') }}">Get started</a>{% endif %}</div></div>
+  <div class="hero-art"><div class="certificate-art"><div class="seal">✓</div><div class="line long"></div><div class="line"></div><div class="line short"></div><div class="verified"><span>✓</span><div><b>Integrity check</b><small>Ready to verify</small></div></div></div></div>
+</section>
+<section class="stats">
+  <div class="stat"><span>Total records</span><b>{{ stats.total }}</b></div><div class="stat"><span>Valid certificates</span><b>{{ stats.valid }}</b></div><div class="stat"><span>Revoked</span><b>{{ stats.revoked }}</b></div><div class="stat"><span>Institutions</span><b>{{ stats.institutions }}</b></div>
+</section>
+<section class="section-heading"><div><div class="eyebrow">PLATFORM OVERVIEW</div><h2>Built for every stakeholder</h2></div><p>Simple workflows for issuing institutions, students, employers, and system administrators.</p></section>
+<section class="feature-grid">
+  <article class="feature"><div class="feature-icon">▣</div><h3>Institutions</h3><p>Issue certificate records, upload supporting documents, and revoke records when necessary.</p></article>
+  <article class="feature"><div class="feature-icon">◎</div><h3>Students</h3><p>View certificates associated with your profile and access records securely.</p></article>
+  <article class="feature"><div class="feature-icon">⌕</div><h3>Employers & verifiers</h3><p>Check a certificate ID without needing an account or institution API key.</p></article>
+  <article class="feature"><div class="feature-icon">⚙</div><h3>Administrators</h3><p>Review accounts, inspect audit events, and monitor certificate activity.</p></article>
+</section>
+<section class="panel"><div class="section-heading compact"><div><div class="eyebrow">RECENT ACTIVITY</div><h2>Recently issued records</h2></div><a href="{{ url_for('verify') }}" class="text-link">Verify a record →</a></div>
+{% if recent %}<div class="table-wrap"><table><thead><tr><th>Certificate ID</th><th>Student</th><th>Course</th><th>Institution</th><th>Status</th></tr></thead><tbody>{% for c in recent %}<tr><td><code>{{ c.certificate_id }}</code></td><td>{{ c.student_name }}</td><td>{{ c.course }}</td><td>{{ c.organization or 'Institution' }}</td><td><span class="status {{ c.status }}">{{ c.status }}</span></td></tr>{% endfor %}</tbody></table></div>{% else %}<p class="muted empty">No certificates have been issued yet.</p>{% endif %}</section>
+{% endblock %}

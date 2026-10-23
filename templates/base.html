@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}CertiChain{% endblock %} · Certificate Validation</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="{{ url_for('index') }}"><span class="brand-mark">✓</span> CertiChain</a>
+  <nav>
+    <a href="{{ url_for('verify') }}">Verify</a>
+    {% if g.user %}
+      <a href="{{ url_for('dashboard') }}">Dashboard</a>
+      {% if g.user.role in ['institution','admin'] %}<a href="{{ url_for('issue') }}">Issue</a><a href="{{ url_for('revoke') }}">Revoke</a>{% endif %}
+      {% if g.user.role == 'admin' %}<a href="{{ url_for('admin_users') }}">Users</a><a href="{{ url_for('admin_audit') }}">Audit</a>{% endif %}
+      <a href="{{ url_for('profile') }}">Profile</a><a class="nav-cta" href="{{ url_for('logout') }}">Sign out</a>
+    {% else %}
+      <a href="{{ url_for('login') }}">Sign in</a><a class="nav-cta" href="{{ url_for('register') }}">Create account</a>
+    {% endif %}
+  </nav>
+</header>
+<main class="container">
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+{% endwith %}
+{% block content %}{% endblock %}
+</main>
+<footer class="footer">CertiChain · Certificate integrity demonstration · Use HTTPS and a security review before production deployment.</footer>
+</body></html>
